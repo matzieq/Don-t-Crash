@@ -2,75 +2,109 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class Rocket : MonoBehaviour 
-{
+public class Rocket : MonoBehaviour {
 
     Rigidbody rigidBody;
     AudioSource audioSource;
+
+    enum State { Alive, Dying, Transcending };
+
+    State state = State.Alive;
+
     [SerializeField] float rcsThrust = 100f;
     [SerializeField] float mainThrust = 100f;
 
+    [SerializeField] AudioClip mainEngine;
+    [SerializeField] AudioClip death;
+    [SerializeField] AudioClip success;
+
+    [SerializeField] ParticleSystem mainEngineParticles;
+    [SerializeField] ParticleSystem deathParticles;
+    [SerializeField] ParticleSystem successParticles;
+
     // Use this for initialization
-    void Start () 
-    {
+    void Start() {
         rigidBody = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
-	}
-	
-	// Update is called once per frame
-	void Update () 
-    {
-        Thrust();
-        Rotate();
-	}
 
-    void OnCollisionEnter(Collision collision) 
-    {
-        switch (collision.gameObject.tag) 
-        {
+    }
+
+    // Update is called once per frame
+    void Update() {
+        if (state == State.Alive) {
+            RespondToThrustInput();
+            RespondToRotateInput();
+        }
+    }
+
+    void OnCollisionEnter(Collision collision) {
+        if (state != State.Alive) { return; }
+
+        switch (collision.gameObject.tag) {
             case "Friendly":
-                print("OK");
+                //do nothing
                 break;
-            case "Fuel":
-                print("Fuel");
+            case "Finish":
+                StartSuccessSequence();
                 break;
             default:
-                print("dead!");
+                StartDeathSequence();
                 break;
         }
     }
 
-    private void Thrust() 
-    {
-    
-        if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow)) 
-        {
-            rigidBody.AddRelativeForce(Vector3.up * mainThrust);
-            if (!audioSource.isPlaying) 
-            {
-                audioSource.Play();
-            }
-        } 
-        else 
-        {
+    private void StartDeathSequence() {
+        state = State.Dying;
+        audioSource.Stop();
+        audioSource.PlayOneShot(death);
+        deathParticles.Play();
+        Invoke("RestartGame", 1f);
+    }
+
+    private void StartSuccessSequence() {
+        state = State.Transcending;
+        audioSource.PlayOneShot(success);
+        successParticles.Play();
+        Invoke("LoadNextScene", 1f);
+    }
+
+    private void RestartGame() {
+        SceneManager.LoadScene(0);
+    }
+
+    private void LoadNextScene() {
+        SceneManager.LoadScene(1); //todo allow for more than 2 levels
+    }
+
+    private void RespondToThrustInput() {
+
+        if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow)) {
+            ApplyThrust();
+        } else {
             audioSource.Stop();
+            mainEngineParticles.Stop();
         }
     }
 
-    private void Rotate() 
-    {
+    private void ApplyThrust() {
+        rigidBody.AddRelativeForce(Vector3.up * mainThrust);
+        if (!audioSource.isPlaying) {
+            audioSource.PlayOneShot(mainEngine);
+        }
+        mainEngineParticles.Play();
+    }
+
+    private void RespondToRotateInput() {
 
         rigidBody.freezeRotation = true; //take manual control of the rotation
-        
+
         float rotationThisFrame = rcsThrust * Time.deltaTime;
 
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-        {
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) {
             transform.Rotate(Vector3.forward * rotationThisFrame);
-        } 
-        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) 
-        {
+        } else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) {
             transform.Rotate(-Vector3.forward * rotationThisFrame);
         }
 
