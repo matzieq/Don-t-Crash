@@ -12,6 +12,7 @@ public class Rocket : MonoBehaviour {
     enum State { Alive, Dying, Transcending };
 
     State state = State.Alive;
+    bool isColliding = true;
 
     [SerializeField] float rcsThrust = 100f;
     [SerializeField] float mainThrust = 100f;
@@ -38,6 +39,19 @@ public class Rocket : MonoBehaviour {
             RespondToThrustInput();
             RespondToRotateInput();
         }
+        if (Debug.isDebugBuild) {
+            RespondToCheatKeys();
+        }
+    }
+
+    private void RespondToCheatKeys() {
+        if (Input.GetKeyDown(KeyCode.L)) {
+            LoadNextScene();
+        }
+        if (Input.GetKeyDown(KeyCode.C)) {
+            audioSource.PlayOneShot(success);
+            isColliding = !isColliding;
+        }
     }
 
     void OnCollisionEnter(Collision collision) {
@@ -51,7 +65,9 @@ public class Rocket : MonoBehaviour {
                 StartSuccessSequence();
                 break;
             default:
-                StartDeathSequence();
+                if (isColliding) {
+                    StartDeathSequence();
+                }
                 break;
         }
     }
