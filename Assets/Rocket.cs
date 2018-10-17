@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Rocket : MonoBehaviour {
 
     Rigidbody rigidBody;
     AudioSource audioSource;
+    [SerializeField] Text achievementText;
 
     enum State { Alive, Dying, Transcending };
 
@@ -30,6 +32,9 @@ public class Rocket : MonoBehaviour {
     void Start() {
         rigidBody = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
+        if (SceneManager.GetActiveScene().buildIndex == 0) {
+            achievementText.text = "";
+        }
 
     }
 
@@ -77,6 +82,9 @@ public class Rocket : MonoBehaviour {
         audioSource.Stop();
         audioSource.PlayOneShot(death);
         deathParticles.Play();
+        if (SceneManager.GetActiveScene().buildIndex == 0) {
+            achievementText.text = "ACHIEVEMENT UNLOCKED!\nDied on the title screen";
+        }
         Invoke("RestartGame", levelLoadDelay);
     }
 
@@ -101,7 +109,6 @@ public class Rocket : MonoBehaviour {
     }
 
     private void RespondToThrustInput() {
-
         if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow)) {
             ApplyThrust();
         } else {
@@ -119,17 +126,13 @@ public class Rocket : MonoBehaviour {
     }
 
     private void RespondToRotateInput() {
-
         rigidBody.freezeRotation = true; //take manual control of the rotation
-
         float rotationThisFrame = rcsThrust * Time.deltaTime;
-
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) {
             transform.Rotate(Vector3.forward * rotationThisFrame);
         } else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) {
             transform.Rotate(-Vector3.forward * rotationThisFrame);
         }
-
         rigidBody.freezeRotation = false; //resume physics control
     }
 

@@ -89,7 +89,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
-  m_LightingDataAsset: {fileID: 112000002, guid: a7c1dc0be6825244dac7577b0845943b,
+  m_LightingDataAsset: {fileID: 112000002, guid: a707b088eac32ce4aa963de465dfc235,
     type: 2}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -1911,4 +1911,46 @@ Prefab:
     m_RemovedComponents:
     - {fileID: 114538119301553058, guid: 754709afa29ac7a468eaa48aed4bae36, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: 754709afa29ac7a468eaa48aed4bae36, type: 2}
+  m_IsPrefabAsset: 0
+--- !u!1001 &2131304143
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4533116886135030, guid: 69e537923e6bccc4ba8aa6c4d912e57f, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533116886135030, guid: 69e537923e6bccc4ba8aa6c4d912e57f, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533116886135030, guid: 69e537923e6bccc4ba8aa6c4d912e57f, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533116886135030, guid: 69e537923e6bccc4ba8aa6c4d912e57f, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533116886135030, guid: 69e537923e6bccc4ba8aa6c4d912e57f, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533116886135030, guid: 69e537923e6bccc4ba8aa6c4d912e57f, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533116886135030, guid: 69e537923e6bccc4ba8aa6c4d912e57f, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533116886135030, guid: 69e537923e6bccc4ba8aa6c4d912e57f, type: 2}
+      propertyPath: m_RootOrder
+      value: 11
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 69e537923e6bccc4ba8aa6c4d912e57f, type: 2}
   m_IsPrefabAsset: 0
