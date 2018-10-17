@@ -92,6 +92,7 @@ public class Rocket : MonoBehaviour {
         state = State.Transcending;
         audioSource.PlayOneShot(success);
         successParticles.Play();
+        rigidBody.freezeRotation = true;
         Invoke("LoadNextScene", levelLoadDelay);
     }
 
@@ -101,9 +102,9 @@ public class Rocket : MonoBehaviour {
 
     private void LoadNextScene() {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-        int nextSceneIndex = 0;
-        if (currentSceneIndex < SceneManager.sceneCountInBuildSettings - 1) {
-            nextSceneIndex = currentSceneIndex + 1;
+        int nextSceneIndex = currentSceneIndex + 1;
+        if (nextSceneIndex == SceneManager.sceneCountInBuildSettings) {
+            nextSceneIndex = 1;
         }
         SceneManager.LoadScene(nextSceneIndex); //todo allow for more than 2 levels
     }
